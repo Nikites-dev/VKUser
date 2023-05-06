@@ -32,7 +32,7 @@ namespace VKUser.Controllers
 
                 if (user != null)
                 {
-                    return Ok(user);
+                    return Ok( new {user} );
                 }
 
                 return NotFound();
@@ -97,7 +97,7 @@ namespace VKUser.Controllers
             user.UserStateId = 2;
    
             _userRepository.UpdateAsync(user);
-            return Ok(user);
+            return Ok();
         }
     }
 }

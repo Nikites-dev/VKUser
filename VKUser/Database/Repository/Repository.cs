@@ -28,8 +28,6 @@ namespace VKUser.Database.Repository
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
-
-        
         
         public async Task<T?> GetAsync(int id)
         {
@@ -52,7 +50,7 @@ namespace VKUser.Database.Repository
            // return await _context.Set<T>().FirstOrDefaultAsync(x => x.Login == login);
            return await _context.User.FirstOrDefaultAsync(x => x.Login == login);
         }
-        
+
         public bool IsUserGroupOneAdmin()
         {
          return _context.User.Where(x => x.UserGroupId == 1).ToList().Count < 1;
