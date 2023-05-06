@@ -46,8 +46,7 @@ namespace VKUser.Controllers
         [HttpPost("users/post/")]
         public async Task<IActionResult> Post(String login, String password, int userGroupId)
         {
-            
-                if ((login == null || login.Trim() == "") || (password == null || password.Trim() == "") || userGroupId == null)
+            if ((login == null || login.Trim() == "") || (password == null || password.Trim() == "") || userGroupId == null)
                 {
                     return BadRequest(401);
                 }
@@ -69,23 +68,36 @@ namespace VKUser.Controllers
                 {
                     return BadRequest("you cannot add more than one admin to the system");
                 }
-
                 
-
                 User newUser = new User();
                 newUser.Login = login;
                 newUser.Password = password;
-                
                 newUser.CreatedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, DateTimeKind.Utc);
-            
-                newUser.UserGroupId = 1;
-                newUser.UserStateId = userGroupId;
-
-                await _userRepository.AddAsync(newUser);
+                newUser.UserStateId = 1;
+                newUser.UserGroupId = userGroupId;
                 
+                await _userRepository.AddAsync(newUser);
+            
                 Thread.Sleep(5000);
                 
                 return Ok();
+        }
+
+        [HttpDelete("users/delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userRepository.GetAsync(id.Value);
+
+            user.CreatedDate = new DateTime(user.CreatedDate.Year, user.CreatedDate.Month, user.CreatedDate.Day, user.CreatedDate.Hour, user.CreatedDate.Minute, user.CreatedDate.Second, DateTimeKind.Utc);
+            user.UserStateId = 2;
+   
+            _userRepository.UpdateAsync(user);
+            return Ok(user);
         }
     }
 }

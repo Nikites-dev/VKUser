@@ -11,6 +11,5 @@ namespace VKUser.Database
         }
 
         public DbSet<User> User { get; set; }
-        public DbSet<UserGroup> UserGroup { get; set; }
     }
 }

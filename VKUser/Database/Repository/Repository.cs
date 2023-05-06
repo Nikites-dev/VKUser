@@ -29,24 +29,33 @@ namespace VKUser.Database.Repository
             await _context.SaveChangesAsync();
         }
 
+        
+        
         public async Task<T?> GetAsync(int id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
-
+        
+        public async Task DeleteAsync(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        
         public List<User> GetListUsersAsync()
         {
             return _context.User.ToList();
         }
 
-        public async Task<T?> GetAsync(String login)
+        public async Task<User?> GetAsync(String login)
         {
-            return await _context.Set<T>().FirstOrDefaultAsync(x => x.Login == login);
+           // return await _context.Set<T>().FirstOrDefaultAsync(x => x.Login == login);
+           return await _context.User.FirstOrDefaultAsync(x => x.Login == login);
         }
         
         public bool IsUserGroupOneAdmin()
         {
-         return _context.User.Where(x => x.UserGroupId == 1).ToList().Count <= 1;
+         return _context.User.Where(x => x.UserGroupId == 1).ToList().Count < 1;
         }
     }
 }
