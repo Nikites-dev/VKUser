@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,16 @@ namespace VKUser.Database.Repository
         public List<User> GetListUsersAsync()
         {
             return _context.User.ToList();
+        }
+
+        public async Task<T?> GetAsync(String login)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(x => x.Login == login);
+        }
+        
+        public bool IsUserGroupOneAdmin()
+        {
+         return _context.User.Where(x => x.UserGroupId == 1).ToList().Count <= 1;
         }
     }
 }
