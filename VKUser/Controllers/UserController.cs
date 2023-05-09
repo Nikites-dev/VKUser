@@ -28,11 +28,11 @@ namespace VKUser.Controllers
 
             if (id is > 0)
             {
-                var user = await _userRepository.GetAsync(id.Value);
+                User user = await _userRepository.GetAsync(id.Value);
 
                 if (user != null)
                 {
-                    return Ok( new {user} );
+                    return Ok( user);
                 }
 
                 return NotFound();
@@ -93,11 +93,29 @@ namespace VKUser.Controllers
 
             var user = await _userRepository.GetAsync(id.Value);
 
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             user.CreatedDate = new DateTime(user.CreatedDate.Year, user.CreatedDate.Month, user.CreatedDate.Day, user.CreatedDate.Hour, user.CreatedDate.Minute, user.CreatedDate.Second, DateTimeKind.Utc);
             user.UserStateId = 2;
    
             _userRepository.UpdateAsync(user);
             return Ok();
+        }
+
+        [HttpGet("users/getAll/")]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = _userRepository.GetListAsync();
+
+            if (users == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(users);
         }
     }
 }

@@ -40,9 +40,9 @@ namespace VKUser.Database.Repository
             await _context.SaveChangesAsync();
         }
         
-        public List<User> GetListUsersAsync()
+        public async Task<List<T?>> GetListAsync()
         {
-            return _context.User.ToList();
+            return _context.Set<T>().ToList();
         }
 
         public async Task<User?> GetAsync(String login)
